@@ -82,3 +82,22 @@ Password for 'https://rharrington31@github.com':
 ]0;~/Dropbox/01 - Personal Projects/NBA TrendsRyans-MacBook-Pro:NBA Trends ryanharrington$ git init
 Reinitialized existing Git repository in /Users/ryanharrington/Dropbox/01 - Personal Projects/NBA Trends/.git/
 ]0;~/Dropbox/01 - Personal Projects/NBA TrendsRyans-MacBook-Pro:NBA Trends ryanharrington$ git add .
+]0;~/Dropbox/01 - Personal Projects/NBA TrendsRyans-MacBook-Pro:NBA Trends ryanharrington$ git commit -m "first commit"
+[master 81a4bac] first commit
+ 2 files changed, 82 insertions(+), 1 deletion(-)
+ rewrite .Rproj.user/D5D418CD/console06/INDEX001 (73%)
+]0;~/Dropbox/01 - Personal Projects/NBA TrendsRyans-MacBook-Pro:NBA Trends ryanharrington$ git remote add origin https://githu b.com/rharrington31/NBA.git
+fatal: remote origin already exists.
+]0;~/Dropbox/01 - Personal Projects/NBA TrendsRyans-MacBook-Pro:NBA Trends ryanharrington$ git remote -v
+origin	https://github.com/rharrington31/NBA.git (fetch)
+origin	https://github.com/rharrington31/NBA.git (push)
+]0;~/Dropbox/01 - Personal Projects/NBA TrendsRyans-MacBook-Pro:NBA Trends ryanharrington$ git push -u origin master
+fatal: cannot run rpostback-askpass: No such file or directory
+Username for 'https://github.com': rharrington31
+fatal: cannot run rpostback-askpass: No such file or directory
+Password for 'https://rharrington31@github.com': 
+remote: Invalid username or password.
+fatal: Authentication failed for 'https://github.com/rharrington31/NBA.git/'
+]0;~/Dropbox/01 - Personal Projects/NBA TrendsRyans-MacBook-Pro:NBA Trends ryanharrington$ git init
+Reinitialized existing Git repository in /Users/ryanharrington/Dropbox/01 - Personal Projects/NBA Trends/.git/
+]0;~/Dropbox/01 - Personal Projects/NBA TrendsRyans-MacBook-Pro:NBA Trends ryanharrington$ git add .
