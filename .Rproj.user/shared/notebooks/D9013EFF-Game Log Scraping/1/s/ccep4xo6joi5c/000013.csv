@@ -1,0 +1,1596 @@
+"0","schedule <- NULL"
+"0","status <- NULL"
+"0","for (year in years){"
+"0","  "
+"0","  for (month in months){"
+"0","    "
+"0","    # Generate URL"
+"0","    season_month_url <- paste0(""https://www.basketball-reference.com/leagues/NBA_"","
+"0","                               year,""_games-"",month,"".html"")"
+"0","    "
+"0","    # Read webpage html"
+"0","    webpage_check <- try("
+"0","      "
+"0","      season_month_webpage <- read_html(season_month_url)"
+"0","      , silent = TRUE"
+"0","      "
+"0","    )"
+"0","    "
+"0","    # Check to see if there was an error. Only perform the function if there wasn't one."
+"0","    if (class(webpage_check) == ""try-error"") {"
+"0","      "
+"0","      # DO NOTHING"
+"0","      message(paste(""The webpage"",season_month_url,""failed to load.""))"
+"0","      webpage_status <- ""Failure"""
+"0","      "
+"0","    } else {"
+"0","      "
+"0","      webpage_status <- ""Successful"""
+"0","      "
+"0","      # Pull schedule"
+"0","      schedule_temp <- "
+"0","        season_month_webpage %>%"
+"0","        html_nodes(""#schedule"") %>%"
+"0","        html_table() %>%"
+"0","        as.data.frame() %>%"
+"0","        select(Date, ""Visitor"" = Visitor.Neutral, ""Visitor_PTS"" = PTS, ""Home"" = Home.Neutral, ""Home_PTS"" = PTS.1) %>%"
+"0","        mutate(Season = year)"
+"0","      "
+"0","      # Bind schedule_temp to schedule"
+"0","      schedule <- rbind(schedule,schedule_temp)"
+"0","      "
+"0","      # Status of each webpage"
+"0","      status_temp <- data.frame(Year = year,"
+"0","                                Month = month,"
+"0","                                URL = season_month_url,"
+"0","                                Status = webpage_status)"
+"0","      "
+"0","      # Bind status_temp to status"
+"0","      status <- rbind(status, status_temp)"
+"0","      "
+"0","    }"
+"0","    "
+"0","    # Sleep for a bit"
+"0","    sleep_time <- runif(1) + 3"
+"0","    Sys.sleep(time = sleep_time)"
+"0","    "
+"0","    message(paste(""Completed scraping"",tools::toTitleCase(month),""of the"",year,""season. There are currently"",nrow(schedule),""games included in the dataset.""))"
+"0","    "
+"0","  }"
+"0","  "
+"0","}"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1950 season. There are currently 1 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1950 season. There are currently 120 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1950 season. There are currently 242 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1950 season. There are currently 366 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1950 season. There are currently 482 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1950 season. There are currently 584 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1950 season. There are currently 594 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1951 season. There are currently 595 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1951 season. There are currently 676 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1951 season. There are currently 752 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1951 season. There are currently 831 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1951 season. There are currently 904 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1951 season. There are currently 964 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1951 season. There are currently 975 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_1952_games-october.html failed to load.
+"
+"2","Completed scraping October of the 1952 season. There are currently 975 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1952 season. There are currently 1040 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Warning:"
+"2"," closing unused connection 3 (https://www.basketball-reference.com/leagues/NBA_1952_games-october.html)
+"
+"2","Completed scraping December of the 1952 season. There are currently 1114 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1952 season. There are currently 1187 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1952 season. There are currently 1261 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1952 season. There are currently 1318 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1952 season. There are currently 1331 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1953 season. There are currently 1332 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1953 season. There are currently 1405 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1953 season. There are currently 1478 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1953 season. There are currently 1556 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1953 season. There are currently 1634 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1953 season. There are currently 1700 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1953 season. There are currently 1707 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1954 season. There are currently 1711 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1954 season. There are currently 1777 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1954 season. There are currently 1840 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1954 season. There are currently 1914 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1954 season. There are currently 1992 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1954 season. There are currently 2049 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1954 season. There are currently 2055 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1955 season. There are currently 2060 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1955 season. There are currently 2100 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1955 season. There are currently 2163 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1955 season. There are currently 2239 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1955 season. There are currently 2310 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1955 season. There are currently 2359 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1955 season. There are currently 2365 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_1956_games-october.html failed to load.
+"
+"2","Completed scraping October of the 1956 season. There are currently 2365 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1956 season. There are currently 2411 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1956 season. There are currently 2470 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Warning:"
+"2"," closing unused connection 3 (https://www.basketball-reference.com/leagues/NBA_1956_games-october.html)
+"
+"2","Completed scraping January of the 1956 season. There are currently 2547 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1956 season. There are currently 2617 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1956 season. There are currently 2673 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1956 season. There are currently 2677 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1957 season. There are currently 2683 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1957 season. There are currently 2738 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1957 season. There are currently 2797 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1957 season. There are currently 2867 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1957 season. There are currently 2935 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1957 season. There are currently 2980 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1957 season. There are currently 2985 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1958 season. There are currently 2994 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1958 season. There are currently 3050 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1958 season. There are currently 3112 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1958 season. There are currently 3181 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1958 season. There are currently 3249 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1958 season. There are currently 3291 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1958 season. There are currently 3295 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1959 season. There are currently 3306 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1959 season. There are currently 3363 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1959 season. There are currently 3421 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1959 season. There are currently 3492 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1959 season. There are currently 3556 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1959 season. There are currently 3601 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1959 season. There are currently 3606 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1960 season. There are currently 3619 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1960 season. There are currently 3679 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1960 season. There are currently 3741 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1960 season. There are currently 3812 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1960 season. There are currently 3884 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1960 season. There are currently 3927 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1960 season. There are currently 3932 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1961 season. There are currently 3950 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1961 season. There are currently 4010 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1961 season. There are currently 4074 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1961 season. There are currently 4147 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1961 season. There are currently 4218 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1961 season. There are currently 4268 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1961 season. There are currently 4274 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1962 season. There are currently 4296 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1962 season. There are currently 4361 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1962 season. There are currently 4438 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1962 season. There are currently 4518 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1962 season. There are currently 4600 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1962 season. There are currently 4653 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1962 season. There are currently 4664 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1963 season. There are currently 4691 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1963 season. There are currently 4759 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1963 season. There are currently 4829 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1963 season. There are currently 4905 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1963 season. There are currently 4981 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1963 season. There are currently 5038 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1963 season. There are currently 5054 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1964 season. There are currently 5081 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1964 season. There are currently 5144 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1964 season. There are currently 5210 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1964 season. There are currently 5289 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1964 season. There are currently 5368 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1964 season. There are currently 5426 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1964 season. There are currently 5442 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1965 season. There are currently 5473 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1965 season. There are currently 5535 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1965 season. There are currently 5607 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1965 season. There are currently 5680 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1965 season. There are currently 5750 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1965 season. There are currently 5811 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1965 season. There are currently 5829 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1966 season. There are currently 5858 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1966 season. There are currently 5927 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1966 season. There are currently 5992 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1966 season. There are currently 6067 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1966 season. There are currently 6136 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1966 season. There are currently 6197 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1966 season. There are currently 6217 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1967 season. There are currently 6251 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1967 season. There are currently 6328 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1967 season. There are currently 6402 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1967 season. There are currently 6486 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1967 season. There are currently 6564 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1967 season. There are currently 6639 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1967 season. There are currently 6654 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1968 season. There are currently 6700 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1968 season. There are currently 6790 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1968 season. There are currently 6886 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1968 season. There are currently 6977 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1968 season. There are currently 7075 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1968 season. There are currently 7167 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1968 season. There are currently 7186 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1969 season. There are currently 7234 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1969 season. There are currently 7342 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1969 season. There are currently 7454 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1969 season. There are currently 7562 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1969 season. There are currently 7671 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1969 season. There are currently 7772 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1969 season. There are currently 7797 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1970 season. There are currently 7848 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1970 season. There are currently 7958 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1970 season. There are currently 8070 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1970 season. There are currently 8185 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1970 season. There are currently 8292 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1970 season. There are currently 8384 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1970 season. There are currently 8408 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1971 season. There are currently 8483 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1971 season. There are currently 8614 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1971 season. There are currently 8748 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1971 season. There are currently 8883 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1971 season. There are currently 9008 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1971 season. There are currently 9121 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1971 season. There are currently 9146 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1972 season. There are currently 9220 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1972 season. There are currently 9339 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1972 season. There are currently 9471 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1972 season. There are currently 9595 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1972 season. There are currently 9732 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1972 season. There are currently 9851 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1972 season. There are currently 9878 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1973 season. There are currently 9955 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1973 season. There are currently 10072 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1973 season. There are currently 10200 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1973 season. There are currently 10328 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1973 season. There are currently 10452 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1973 season. There are currently 10579 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1973 season. There are currently 10612 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1974 season. There are currently 10693 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1974 season. There are currently 10810 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1974 season. There are currently 10940 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1974 season. There are currently 11059 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1974 season. There are currently 11186 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1974 season. There are currently 11316 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1974 season. There are currently 11346 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1975 season. There are currently 11407 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1975 season. There are currently 11536 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1975 season. There are currently 11657 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1975 season. There are currently 11788 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1975 season. There are currently 11915 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1975 season. There are currently 12055 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1975 season. There are currently 12119 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1976 season. There are currently 12150 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1976 season. There are currently 12274 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1976 season. There are currently 12407 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1976 season. There are currently 12548 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1976 season. There are currently 12665 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1976 season. There are currently 12803 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1976 season. There are currently 12888 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1977 season. There are currently 12944 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1977 season. There are currently 13098 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1977 season. There are currently 13255 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1977 season. There are currently 13417 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1977 season. There are currently 13557 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1977 season. There are currently 13727 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1977 season. There are currently 13822 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1978 season. There are currently 13885 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1978 season. There are currently 14041 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1978 season. There are currently 14195 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1978 season. There are currently 14349 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1978 season. There are currently 14491 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1978 season. There are currently 14666 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1978 season. There are currently 14756 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1979 season. There are currently 14851 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1979 season. There are currently 15001 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1979 season. There are currently 15151 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1979 season. There are currently 15311 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1979 season. There are currently 15450 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1979 season. There are currently 15608 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1979 season. There are currently 15692 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1980 season. There are currently 15801 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1980 season. There are currently 15960 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1980 season. There are currently 16119 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1980 season. There are currently 16291 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1980 season. There are currently 16422 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1980 season. There are currently 16594 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1980 season. There are currently 16636 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1981 season. There are currently 16756 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1981 season. There are currently 16921 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1981 season. There are currently 17087 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1981 season. There are currently 17254 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1981 season. There are currently 17406 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1981 season. There are currently 17582 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1981 season. There are currently 17625 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1982 season. There are currently 17644 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1982 season. There are currently 17793 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1982 season. There are currently 17958 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1982 season. There are currently 18114 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1982 season. There are currently 18274 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1982 season. There are currently 18455 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1982 season. There are currently 18589 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1983 season. There are currently 18611 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1983 season. There are currently 18771 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1983 season. There are currently 18936 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1983 season. There are currently 19108 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1983 season. There are currently 19248 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1983 season. There are currently 19426 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1983 season. There are currently 19554 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1984 season. There are currently 19575 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1984 season. There are currently 19744 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1984 season. There are currently 19904 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1984 season. There are currently 20057 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1984 season. There are currently 20230 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1984 season. There are currently 20412 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1984 season. There are currently 20539 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1985 season. There are currently 20571 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1985 season. There are currently 20735 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1985 season. There are currently 20899 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1985 season. There are currently 21068 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1985 season. There are currently 21214 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1985 season. There are currently 21397 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1985 season. There are currently 21522 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1986 season. There are currently 21560 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1986 season. There are currently 21729 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1986 season. There are currently 21886 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1986 season. There are currently 22061 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1986 season. There are currently 22207 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1986 season. There are currently 22386 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1986 season. There are currently 22502 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1987 season. There are currently 22511 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1987 season. There are currently 22672 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1987 season. There are currently 22834 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1987 season. There are currently 23009 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1987 season. There are currently 23154 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1987 season. There are currently 23331 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1987 season. There are currently 23472 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_1988_games-october.html failed to load.
+"
+"2","Completed scraping October of the 1988 season. There are currently 23472 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Warning:"
+"2"," closing unused connection 3 (https://www.basketball-reference.com/leagues/NBA_1988_games-october.html)
+"
+"2","Completed scraping November of the 1988 season. There are currently 23611 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1988 season. There are currently 23771 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1988 season. There are currently 23941 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1988 season. There are currently 24096 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1988 season. There are currently 24272 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1988 season. There are currently 24427 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_1989_games-october.html failed to load.
+"
+"2","Completed scraping October of the 1989 season. There are currently 24427 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1989 season. There are currently 24593 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1989 season. There are currently 24767 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1989 season. There are currently 24949 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1989 season. There are currently 25105 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1989 season. There are currently 25306 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1989 season. There are currently 25469 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_1990_games-october.html failed to load.
+"
+"2","Completed scraping October of the 1990 season. There are currently 25469 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Warning in UseMethod(""as.list"") :"
+"2","
+ "
+"2"," closing unused connection 3 (https://www.basketball-reference.com/leagues/NBA_1990_games-october.html)
+"
+"2","Completed scraping November of the 1990 season. There are currently 25653 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1990 season. There are currently 25843 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1990 season. There are currently 26045 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1990 season. There are currently 26215 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1990 season. There are currently 26426 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1990 season. There are currently 26593 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_1991_games-october.html failed to load.
+"
+"2","Completed scraping October of the 1991 season. There are currently 26593 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Warning:"
+"2"," closing unused connection 3 (https://www.basketball-reference.com/leagues/NBA_1991_games-october.html)
+"
+"2","Completed scraping November of the 1991 season. There are currently 26783 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1991 season. There are currently 26973 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1991 season. There are currently 27174 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1991 season. There are currently 27341 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1991 season. There are currently 27555 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1991 season. There are currently 27723 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_1992_games-october.html failed to load.
+"
+"2","Completed scraping October of the 1992 season. There are currently 27723 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Warning:"
+"2"," closing unused connection 3 (https://www.basketball-reference.com/leagues/NBA_1992_games-october.html)
+"
+"2","Completed scraping November of the 1992 season. There are currently 27928 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1992 season. There are currently 28112 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1992 season. There are currently 28314 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1992 season. There are currently 28491 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1992 season. There are currently 28698 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1992 season. There are currently 28857 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_1993_games-october.html failed to load.
+"
+"2","Completed scraping October of the 1993 season. There are currently 28857 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Warning in .Internal(vapply(X, FUN, FUN.VALUE, USE.NAMES)) :"
+"2","
+ "
+"2"," closing unused connection 3 (https://www.basketball-reference.com/leagues/NBA_1993_games-october.html)
+"
+"2","Completed scraping November of the 1993 season. There are currently 29019 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1993 season. There are currently 29213 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1993 season. There are currently 29410 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1993 season. There are currently 29581 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1993 season. There are currently 29790 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1993 season. There are currently 29973 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_1994_games-october.html failed to load.
+"
+"2","Completed scraping October of the 1994 season. There are currently 29973 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Warning in .Internal(inherits(x, what, which)) :"
+"2","
+ "
+"2"," closing unused connection 3 (https://www.basketball-reference.com/leagues/NBA_1994_games-october.html)
+"
+"2","Completed scraping November of the 1994 season. There are currently 30146 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1994 season. There are currently 30339 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1994 season. There are currently 30533 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1994 season. There are currently 30706 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1994 season. There are currently 30911 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1994 season. There are currently 31093 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_1995_games-october.html failed to load.
+"
+"2","Completed scraping October of the 1995 season. There are currently 31093 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Warning:"
+"2"," closing unused connection 3 (https://www.basketball-reference.com/leagues/NBA_1995_games-october.html)
+"
+"2","Completed scraping November of the 1995 season. There are currently 31265 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1995 season. There are currently 31461 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1995 season. There are currently 31659 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1995 season. There are currently 31831 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1995 season. There are currently 32045 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1995 season. There are currently 32217 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_1996_games-october.html failed to load.
+"
+"2","Completed scraping October of the 1996 season. There are currently 32217 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Warning:"
+"2"," closing unused connection 3 (https://www.basketball-reference.com/leagues/NBA_1996_games-october.html)
+"
+"2","Completed scraping November of the 1996 season. There are currently 32417 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1996 season. There are currently 32627 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1996 season. There are currently 32833 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1996 season. There are currently 33021 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1996 season. There are currently 33248 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1996 season. There are currently 33428 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_1997_games-october.html failed to load.
+"
+"2","Completed scraping October of the 1997 season. There are currently 33428 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1997 season. There are currently 33644 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1997 season. There are currently 33850 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1997 season. There are currently 34065 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1997 season. There are currently 34246 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1997 season. There are currently 34464 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1997 season. There are currently 34642 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 1998 season. There are currently 34656 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 1998 season. There are currently 34861 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 1998 season. There are currently 35065 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 1998 season. There are currently 35284 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 1998 season. There are currently 35463 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1998 season. There are currently 35689 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1998 season. There are currently 35861 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_1999_games-october.html failed to load.
+"
+"2","Completed scraping October of the 1999 season. There are currently 35861 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_1999_games-november.html failed to load.
+"
+"2","Completed scraping November of the 1999 season. There are currently 35861 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_1999_games-december.html failed to load.
+"
+"2","Completed scraping December of the 1999 season. There are currently 35861 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_1999_games-january.html failed to load.
+"
+"2","Completed scraping January of the 1999 season. There are currently 35861 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Warning:"
+"2"," closing unused connection 6 (https://www.basketball-reference.com/leagues/NBA_1999_games-january.html)
+"
+"2","Warning:"
+"2"," closing unused connection 5 (https://www.basketball-reference.com/leagues/NBA_1999_games-december.html)
+"
+"2","Warning:"
+"2"," closing unused connection 4 (https://www.basketball-reference.com/leagues/NBA_1999_games-november.html)
+"
+"2","Warning:"
+"2"," closing unused connection 3 (https://www.basketball-reference.com/leagues/NBA_1999_games-october.html)
+"
+"2","Completed scraping February of the 1999 season. There are currently 36047 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 1999 season. There are currently 36297 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 1999 season. There are currently 36542 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_2000_games-october.html failed to load.
+"
+"2","Completed scraping October of the 2000 season. There are currently 36542 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Warning:"
+"2"," closing unused connection 3 (https://www.basketball-reference.com/leagues/NBA_2000_games-october.html)
+"
+"2","Completed scraping November of the 2000 season. There are currently 36751 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 2000 season. There are currently 36964 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 2000 season. There are currently 37168 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 2000 season. There are currently 37356 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 2000 season. There are currently 37583 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 2000 season. There are currently 37756 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 2001 season. There are currently 37769 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 2001 season. There are currently 37978 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 2001 season. There are currently 38195 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 2001 season. There are currently 38409 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 2001 season. There are currently 38587 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 2001 season. There are currently 38808 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 2001 season. There are currently 38971 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 2002 season. There are currently 38988 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 2002 season. There are currently 39196 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 2002 season. There are currently 39403 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 2002 season. There are currently 39618 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 2002 season. There are currently 39792 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 2002 season. There are currently 40027 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 2002 season. There are currently 40189 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 2003 season. There are currently 40209 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 2003 season. There are currently 40426 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 2003 season. There are currently 40637 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 2003 season. There are currently 40856 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 2003 season. There are currently 41031 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 2003 season. There are currently 41255 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 2003 season. There are currently 41419 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 2004 season. There are currently 41445 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 2004 season. There are currently 41653 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 2004 season. There are currently 41869 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 2004 season. There are currently 42096 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 2004 season. There are currently 42279 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 2004 season. There are currently 42503 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 2004 season. There are currently 42646 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_2005_games-october.html failed to load.
+"
+"2","Completed scraping October of the 2005 season. There are currently 42646 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Warning:"
+"2"," closing unused connection 3 (https://www.basketball-reference.com/leagues/NBA_2005_games-october.html)
+"
+"2","Completed scraping November of the 2005 season. There are currently 42856 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 2005 season. There are currently 43072 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 2005 season. There are currently 43304 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 2005 season. There are currently 43479 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 2005 season. There are currently 43711 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 2005 season. There are currently 43903 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_2006_games-october.html failed to load.
+"
+"2","Completed scraping October of the 2006 season. There are currently 43903 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Warning in .Internal(sub(as.character(pattern), as.character(replacement),  :"
+"2","
+ "
+"2"," closing unused connection 3 (https://www.basketball-reference.com/leagues/NBA_2006_games-october.html)
+"
+"2","Completed scraping November of the 2006 season. There are currently 44119 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 2006 season. There are currently 44337 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 2006 season. There are currently 44564 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 2006 season. There are currently 44745 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 2006 season. There are currently 44981 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 2006 season. There are currently 45164 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 2007 season. There are currently 45166 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 2007 season. There are currently 45387 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 2007 season. There are currently 45620 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 2007 season. There are currently 45848 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 2007 season. There are currently 46027 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 2007 season. There are currently 46250 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 2007 season. There are currently 46428 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 2008 season. There are currently 46439 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 2008 season. There are currently 46662 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 2008 season. There are currently 46884 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 2008 season. There are currently 47106 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 2008 season. There are currently 47297 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 2008 season. There are currently 47532 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 2008 season. There are currently 47698 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 2009 season. There are currently 47723 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 2009 season. There are currently 47949 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 2009 season. There are currently 48170 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 2009 season. There are currently 48399 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 2009 season. There are currently 48580 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 2009 season. There are currently 48810 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 2009 season. There are currently 48971 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 2010 season. There are currently 49009 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 2010 season. There are currently 49223 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 2010 season. There are currently 49444 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 2010 season. There are currently 49674 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 2010 season. There are currently 49855 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 2010 season. There are currently 50090 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 2010 season. There are currently 50246 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 2011 season. There are currently 50289 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 2011 season. There are currently 50505 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 2011 season. There are currently 50728 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 2011 season. There are currently 50958 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 2011 season. There are currently 51137 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 2011 season. There are currently 51365 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 2011 season. There are currently 51520 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_2012_games-october.html failed to load.
+"
+"2","Completed scraping October of the 2012 season. There are currently 51520 games included in the dataset.
+"
+"2","The webpage https://www.basketball-reference.com/leagues/NBA_2012_games-november.html failed to load.
+"
+"2","Completed scraping November of the 2012 season. There are currently 51520 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 2012 season. There are currently 51576 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Warning:"
+"2"," closing unused connection 4 (https://www.basketball-reference.com/leagues/NBA_2012_games-november.html)
+"
+"2","Warning:"
+"2"," closing unused connection 3 (https://www.basketball-reference.com/leagues/NBA_2012_games-october.html)
+"
+"2","Completed scraping January of the 2012 season. There are currently 51834 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 2012 season. There are currently 52043 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 2012 season. There are currently 52296 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 2012 season. There are currently 52522 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 2013 season. There are currently 52534 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 2013 season. There are currently 52754 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 2013 season. There are currently 52978 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 2013 season. There are currently 53204 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 2013 season. There are currently 53385 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 2013 season. There are currently 53621 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 2013 season. There are currently 53787 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 2014 season. There are currently 53806 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 2014 season. There are currently 54034 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 2014 season. There are currently 54253 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 2014 season. There are currently 54481 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 2014 season. There are currently 54658 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 2014 season. There are currently 54895 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 2014 season. There are currently 55057 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 2015 season. There are currently 55083 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 2015 season. There are currently 55305 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 2015 season. There are currently 55538 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 2015 season. There are currently 55770 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 2015 season. There are currently 55931 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 2015 season. There are currently 56167 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 2015 season. There are currently 56327 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 2016 season. There are currently 56365 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 2016 season. There are currently 56588 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 2016 season. There are currently 56816 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 2016 season. There are currently 57046 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 2016 season. There are currently 57217 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 2016 season. There are currently 57454 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 2016 season. There are currently 57601 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 2017 season. There are currently 57646 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 2017 season. There are currently 57875 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 2017 season. There are currently 58107 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 2017 season. There are currently 58330 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 2017 season. There are currently 58495 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 2017 season. There are currently 58736 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 2017 season. There are currently 58877 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping October of the 2018 season. There are currently 58981 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping November of the 2018 season. There are currently 59194 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping December of the 2018 season. There are currently 59421 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping January of the 2018 season. There are currently 59637 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping February of the 2018 season. There are currently 59797 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping March of the 2018 season. There are currently 60019 games included in the dataset.
+"
+"2","the condition has length > 1 and only the first element will be used"
+"2","Completed scraping April of the 2018 season. There are currently 60156 games included in the dataset.
+"

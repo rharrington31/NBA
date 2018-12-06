@@ -1,0 +1,392 @@
+---
+title: "Points Per Game Change Over Time"
+author: "Ryan Harrington"
+output: 
+  html_document:
+    theme: yeti
+    highlight: textmate
+    toc: TRUE
+    toc_float: TRUE
+    df_print: paged
+    code_folding: hide
+---
+
+# Setup
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Libraries
+Necessary libraries are loaded in
+
+```{r libraries, message = FALSE, warning = FALSE, error = FALSE}
+
+# install.packages("tidyverse")
+library(tidyverse)
+# install.packages("rvest")
+library(rvest)
+# install.packages("readr")
+library(readr)
+# install.packages("plotly")
+library(plotly)
+
+```
+
+## Functions
+
+### Get Top 20 NBA PPG Leaders
+
+```{r}
+
+leaders_url <- "https://www.basketball-reference.com/leagues/NBA_2018_leaders.html"
+leaders_webpage <- read_html(leaders_url)
+
+```
+
+```{r}
+
+top_20_ppg <- 
+  leaders_webpage %>%
+  html_nodes("#leaders_pts_per_g > table") %>%
+  html_table() %>%
+  as.data.frame()
+
+top_20_ppg_url <-
+  leaders_webpage %>%
+  html_nodes("#leaders_pts_per_g .who a") %>%
+  html_attrs() %>%
+  as.character()
+
+top_20_ppg_url_slug <- gsub("^/|.html","",top_20_ppg_url)
+
+top_20_ppg$url_slug <- top_20_ppg_url_slug
+
+top_20_ppg <- 
+  top_20_ppg %>%
+  dplyr::rename("Rank" = X1, "Player" = X2, "PPG" = X3, "url_slug" = url_slug) %>%
+  separate(Player, c("Player","Team"), sep = " • ") %>%
+  fill(Rank)
+
+top_20_ppg <-
+  top_20_ppg %>%
+  mutate(PPG_low = 0.9*PPG,
+         PPG_high = 1.1*PPG)
+
+```
+
+### Get Player 2017-18 Game Logs
+
+```{r}
+
+player_url <- "https://www.basketball-reference.com/players/j/jamesle01/gamelog/2018/"
+
+player_webpage <- read_html(player_url)
+
+```
+
+```{r}
+
+# Get all tables from the player_webpage
+game_log <- 
+  player_webpage %>%
+  html_table(fill = TRUE)
+
+# Find the table 
+for(i in 1:length(game_log)) {
+  if(ncol(as.data.frame(game_log[i])) == 30) {
+    game_log_table <- as.data.frame(game_log[i])
+  }
+}
+
+
+
+
+```
+
+
+```{r}
+
+game_log_table <- NULL
+
+for (i in 1:nrow(top_20_ppg)) {
+  
+  # Get URL
+  player_url <- paste0("https://www.basketball-reference.com/",top_20_ppg$url_slug[i],"/gamelog/2018/")
+  
+  # print(player_url)
+  
+  # Get webpage
+  player_webpage <- read_html(player_url)
+  
+  # Get all tables from the player_webpage
+  game_log <- 
+    player_webpage %>%
+    html_table(fill = TRUE)
+  
+  # print(length(game_log))
+  
+  # Find the table 
+  for(j in 1:length(game_log)) {
+    if(ncol(as.data.frame(game_log[j])) == 30) {
+      game_log_table_temp <- as.data.frame(game_log[j])
+    }
+  }
+  
+  # Add in player name
+  game_log_table_temp$Player <- top_20_ppg$Player[i]
+  # print(game_log_table_temp)
+  
+  assign(paste0("top_20_ppg_player.",gsub(" ","_",top_20_ppg$Player[i])),game_log_table_temp)
+  
+  # Join the temp table to the real table
+  game_log_table <- rbind(game_log_table, game_log_table_temp)
+  # print(game_log_table)
+  
+  # Sleep for a bit
+  sleep_time <- runif(1) + 5
+  Sys.sleep(time = sleep_time)
+  
+  # print(i)
+  
+}
+
+game_log_table
+
+```
+
+# Data Cleaning
+
+## Remove Headers
+```{r}
+
+game_log_table_clean <- 
+  game_log_table %>%
+  filter(Rk != "Rk")
+
+```
+
+## Get Unique Values for Columns
+
+```{r}
+
+for (i in 1:ncol(game_log_table_clean)) {
+  print("###############################")
+  print(colnames(game_log_table_clean)[i])
+  print(unique(game_log_table_clean[i]))
+}
+# str(game_log_table_clean)
+```
+
+## Rename Columns
+
+```{r}
+
+game_log_table_clean <- 
+  game_log_table_clean %>%
+  rename("Rank" = Rk, "Game" = G, "Date" = Date, "Age" = Age, "Team" = Tm, "Home" = Var.6, "Opp" = Opp, "Margin" = Var.8, "Started" = GS, "Minutes" = MP, "FG" = FG, "FGA" = FGA, "FGpercent" = FG., "X3P" = X3P, "X3PA" = X3PA, "X3Ppercent" = X3P., "FT" = FT, "FTA" = FTA, "FTpercent" = FT., "ORB" = ORB, "DRB" = DRB, "TRB" = TRB, "AST" = AST, "STL" = STL, "BLK" = BLK, "TOV" = TOV, "PF" = PF, "PTS" = PTS, "GmSc" = GmSc, "PlusMinus" = X..., "Player" = Player) %>%
+  select(-Rank, Player, Game:PlusMinus) 
+
+game_log_table_clean <-
+  game_log_table_clean %>%
+  mutate(Game = as.numeric(Game),
+         Date = as.Date(Date),
+         Home = if_else(Home == "@",0,1),
+         Win = if_else(str_detect(Margin, "^W"), 1, 0),
+         Margin = as.numeric(str_extract(Margin, "-[0-9]{1,2}|[0-9]{1,2}")),
+         PlusMinus = if_else(Started %in% c(1,0), as.numeric(str_extract(Margin, "-[0-9]{1,2}|[0-9]{1,2}")),NULL)) %>%
+  select(Game, Player, Date:Team, Opp, Home, Margin, Win, Started:PlusMinus)
+
+```
+
+## Filter Out Games and Mutate
+
+```{r}
+
+game_log_table_analysis <- 
+  game_log_table_clean %>%
+  rename("TeamGame" = Game) %>%
+  filter(Started %in% c(1,0)) %>%
+  mutate(Started = as.numeric(Started),
+         Minutes_num = round(as.numeric(str_extract(Minutes,"^[0-9]{1,2}"))+as.numeric(str_extract(Minutes,"[0-9]{2}$"))/60,2),
+         FG = as.numeric(FG),
+         FGA = as.numeric(FGA),
+         FGpercent = as.numeric(FGpercent),
+         X3P = as.numeric(X3P),
+         X3PA = as.numeric(X3PA),
+         X3Ppercent = as.numeric(X3Ppercent),
+         FT = as.numeric(FT),
+         FTA = as.numeric(FTA),
+         FTpercent = as.numeric(FTpercent),
+         ORB = as.numeric(ORB),
+         DRB = as.numeric(DRB),
+         TRB = as.numeric(TRB),
+         AST = as.numeric(AST),
+         STL = as.numeric(STL),
+         BLK = as.numeric(BLK),
+         TOV = as.numeric(TOV),
+         PF = as.numeric(PF),
+         PTS = as.numeric(PTS),
+         GmSc = as.numeric(GmSc)) %>%
+  dplyr::group_by(Player) %>%
+  mutate(PlayerGame = row_number(),
+         FG_sum = cumsum(FG),
+         FGA_sum = cumsum(FGA),
+         X3P_sum = cumsum(X3P),
+         X3PA_sum = cumsum(X3PA),
+         FT_sum = cumsum(FT),
+         FTA_sum = cumsum(FTA),
+         ORB_sum = cumsum(ORB),
+         DRB_sum = cumsum(DRB),
+         TRB_sum = cumsum(TRB),
+         AST_sum = cumsum(AST),
+         STL_sum = cumsum(STL),
+         BLK_sum = cumsum(BLK),
+         TOV_sum = cumsum(TOV),
+         PF_sum = cumsum(PF),
+         PTS_sum = cumsum(PTS))
+
+game_log_table_analysis_join <-
+  game_log_table_analysis %>%
+  left_join(top_20_ppg, by = "Player") %>%
+  select(-Team.y,-url_slug) %>%
+  mutate(PPG_current = PTS_sum/PlayerGame,
+         Within10per = if_else(PPG_current >= PPG_low & PPG_current <= PPG_high, 1, 0))
+
+```
+
+```{r}
+
+game_log_table_analysis_join %>%
+  select(Player, PlayerGame, PTS, PPG_low, PPG_current, PPG_high, Within10per)
+
+```
+
+```{r}
+
+game_passing_threshold <- 
+  game_log_table_analysis_join %>%
+  filter(Within10per == 0) %>%
+  group_by(Player) %>%
+  filter(Date == max(Date)) %>%
+  select(Player, "TeamGame_threshold" = TeamGame, "PlayerGame_threshold" = PlayerGame)
+
+game_log_table_analysis_join <-
+  game_log_table_analysis_join %>%
+  left_join(game_passing_threshold, by = "Player")
+
+```
+
+
+# Visualize
+
+## Top 10 PPG Players Facet
+
+```{r}
+
+game_log_table_analysis_join %>%
+  filter(Rank < 10) %>%
+  ggplot() +
+  geom_rect(aes(xmin = -Inf,
+                xmax = Inf,
+                ymin = PPG_low,
+                ymax = PPG_high,
+                group = Player),
+            fill = "#eeeeee",
+            alpha = 0.5) +
+  geom_hline(aes(yintercept = PPG),
+             colour = "#aaaaaa") +
+  geom_vline(aes(xintercept = PlayerGame_threshold + 1),
+             colour = "#aaaaaa") +
+  geom_line(aes(x = PlayerGame,
+                y = PTS),
+            colour = "#cccccc",
+            alpha = 0.5) +
+  geom_line(aes(x = PlayerGame,
+                y = PPG_current,
+                group = Player,
+                colour = as.factor(Within10per))) +
+  geom_text(aes(x = PlayerGame_threshold + 1,
+                y = 50,
+                label = paste("Game",PlayerGame_threshold + 1)),
+            hjust = "left",
+            vjust = "bottom",
+            family = "Roboto",
+            fontface = "italic",
+            size = 2,
+            nudge_x = 1,
+            nudge_y = 1) +
+  facet_wrap(~Player, ncol = 5) +
+  xlab("Game Number") +
+  ylab("Points Per Game") +
+  scale_color_manual(values = c("#000000","#009E73"), guide = FALSE) +
+  theme_minimal() +
+  theme(text = element_text(family = "Roboto"),
+        axis.title = element_text(face = "bold",
+                                  size = 10),
+        axis.text = element_text(face = "italic",
+                                 size = 8),
+        panel.background = element_rect(colour = "#000000"),
+        strip.text = element_text(face = "bold",
+                                  size = 8))
+  
+```
+
+## Each of the top 20
+
+```{r}
+
+for (i in 1:nrow(top_20_ppg)) {
+  
+  player_graph <-
+    game_log_table_analysis_join %>%
+    filter(Player == top_20_ppg$Player[i]) %>%
+    ggplot() +
+    geom_rect(aes(xmin = -Inf,
+                  xmax = Inf,
+                  ymin = PPG_low,
+                  ymax = PPG_high),
+              fill = "#eeeeee",
+              alpha = 0.5) +
+    geom_hline(aes(yintercept = PPG),
+               colour = "#aaaaaa") +
+    geom_vline(aes(xintercept = PlayerGame_threshold + 1),
+               colour = "#aaaaaa") +
+    geom_line(aes(x = PlayerGame,
+                  y = PTS),
+              colour = "#cccccc",
+              alpha = 0.5) +
+    geom_line(aes(x = PlayerGame,
+                  y = PPG_current,
+                  group = 1,
+                  colour = as.factor(Within10per))) +
+    geom_text(aes(x = PlayerGame_threshold + 1,
+                  y = 50,
+                  label = paste("Game",PlayerGame_threshold + 1)),
+              hjust = "left",
+              vjust = "bottom",
+              family = "Roboto",
+              fontface = "italic",
+              size = 2,
+              nudge_x = 1,
+              nudge_y = 1) +
+    ggtitle(top_20_ppg$Player[i]) +
+    xlab("Game Number") +
+    ylab("Points Per Game") +
+    xlim(0,82) +
+    ylim(0,60) +
+    scale_color_manual(values = c("#000000","#009E73"), guide = FALSE) +
+    theme_minimal() +
+    theme(text = element_text(family = "Roboto"),
+          axis.title = element_text(face = "bold",
+                                    size = 10),
+          axis.text = element_text(face = "italic",
+                                   size = 8),
+          panel.background = element_rect(colour = "#000000"))
+  
+  print(player_graph)
+  
+}
+
+```
+

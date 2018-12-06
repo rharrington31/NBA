@@ -1,0 +1,13 @@
+"0","(schedule_transform_final <-"
+"0","  schedule_transform %>%"
+"0","  left_join(win_percent_by_team_season) %>%"
+"0","   group_by(Game_Number, Win_Number) %>%"
+"0","   mutate(Win_Percent_Final_Min = min(Win_Percent_Final),"
+"0","          Win_Percent_Final_Max = max(Win_Percent_Final),"
+"0","          Win_Number_Final_Min = max(Win_Number_Final),"
+"0","          Win_Number_Final_Max = max(Win_Number_Final)) %>%"
+"0","   ungroup() %>%"
+"0","   mutate(Win_Percent_Diff = Win_Percent_Final - Win_Percent_Game,"
+"0","          Win_Number_Diff = Win_Number_Final - Win_Number))"
+"2","Joining, by = c(""Team"", ""Season"")
+"
