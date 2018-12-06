@@ -1,3 +1,84 @@
 git  init
 Initialized empty Git repository in /Users/ryanharrington/Dropbox/01 - Personal Projects/NBA Trends/.git/
 ]0;~/Dropbox/01 - Personal Projects/NBA TrendsRyans-MacBook-Pro:NBA Trends ryanharrington$ git  add .
+]0;~/Dropbox/01 - Personal Projects/NBA TrendsRyans-MacBook-Pro:NBA Trends ryanharrington$ git  commit -m "Initial commit"
+[master (root-commit) 090d306] Initial commit
+ 69 files changed, 65265 insertions(+)
+ create mode 100644 .Rhistory
+ create mode 100644 .Rproj.user/D5D418CD/console06/8FA7FBC0
+ create mode 100644 .Rproj.user/D5D418CD/console06/8FA7FBC0.env
+ create mode 100644 .Rproj.user/D5D418CD/console06/INDEX001
+ create mode 100644 .Rproj.user/D5D418CD/pcs/files-pane.pper
+ create mode 100644 .Rproj.user/D5D418CD/pcs/source-pane.pper
+ create mode 100644 .Rproj.user/D5D418CD/pcs/windowlayoutstate.pper
+ create mode 100644 .Rproj.user/D5D418CD/pcs/workbench-pane.pper
+ create mode 100644 .Rproj.user/D5D418CD/rmd-outputs
+ create mode 100644 .Rproj.user/D5D418CD/saved_source_markers
+ create mode 100644 .Rproj.user/D5D418CD/sources/prop/195D518A
+ create mode 100644 .Rproj.user/D5D418CD/sources/prop/244BE22D
+ create mode 100644 .Rproj.user/D5D418CD/sources/prop/24F7DF8F
+ create mode 100644 .Rproj.user/D5D418CD/sources/prop/38706125
+ create mode 100644 .Rproj.user/D5D418CD/sources/prop/INDEX
+ create mode 100644 .Rproj.user/D5D418CD/sources/s-98513E87/16574D61
+ create mode 100644 .Rproj.user/D5D418CD/sources/s-98513E87/16574D61-contents
+ create mode 100644 .Rproj.user/D5D418CD/sources/s-98513E87/59D2AB67-contents
+ create mode 100644 .Rproj.user/D5D418CD/sources/s-98513E87/B7F54C68
+ create mode 100644 .Rproj.user/D5D418CD/sources/s-98513E87/B7F54C68-contents
+ create mode 100644 .Rproj.user/D5D418CD/sources/s-98513E87/D98B7A42
+ create mode 100644 .Rproj.user/D5D418CD/sources/s-98513E87/D98B7A42-contents
+ create mode 100644 .Rproj.user/D5D418CD/sources/s-98513E87/lock_file
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/D5D418CD3FC42591/chunks.json
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/D5D418CD98513E87/chunks.json
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/c0n22oul9mk8u/000019.csv
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/c0n22oul9mk8u/00001a.metadata
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/c0n22oul9mk8u/00001a.rdf
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/c3hlqr4fhc8mp/000002.csv
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/c3yfz6ks28axp/000002.csv
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/c44zexly018ft/000002.csv
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/c50j1ljs2q2pp/00000e.csv
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/cglnwx92dz18y/000008.csv
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/chunks.json
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/ci6cazq91buy9/00002f.csv
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/ci6cazq91buy9/000030.metadata
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/ci6cazq91buy9/000030.png
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/ci6cazq91buy9/000030.snapshot
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/cie0wmddokxr7/00000b.csv
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/cie0wmddokxr7/00000c.metadata
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/cie0wmddokxr7/00000c.rdf
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/cizcw5q6kzqcw/00000c.csv
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/cizcw5q6kzqcw/00000d.metadata
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/cizcw5q6kzqcw/00000d.rdf
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/ckvnuo28zaol6/00001a.csv
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/ckvnuo28zaol6/00001b.metadata
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/ckvnuo28zaol6/00001b.png
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/ckvnuo28zaol6/00001b.snapshot
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/cl4xigew1fmwa/000004.metadata
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/cl4xigew1fmwa/000004.rdf
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/csetup_chunk/000002.csv
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/ct6o57joc4bx9/000051.csv
+ create mode 100644 .Rproj.user/shared/notebooks/96543A3A-Game Log Cleaning/1/s/cwjol3mqtvibs/00000a.csv
+ create mode 100644 .Rproj.user/shared/notebooks/D9013EFF-Game Log Scraping/1/D5D418CD52375191/chunks.json
+ create mode 100644 .Rproj.user/shared/notebooks/D9013EFF-Game Log Scraping/1/s/c8jbtbguap6cx/000002.csv
+ create mode 100644 .Rproj.user/shared/notebooks/D9013EFF-Game Log Scraping/1/s/ccep4xo6joi5c/000013.csv
+ create mode 100644 .Rproj.user/shared/notebooks/D9013EFF-Game Log Scraping/1/s/chunks.json
+ create mode 100644 .Rproj.user/shared/notebooks/D9013EFF-Game Log Scraping/1/s/ck6a7s3u4lv88/000006.metadata
+ create mode 100644 .Rproj.user/shared/notebooks/D9013EFF-Game Log Scraping/1/s/ck6a7s3u4lv88/000006.rdf
+ create mode 100644 .Rproj.user/shared/notebooks/D9013EFF-Game Log Scraping/1/s/cnlnixo2sx0eg/000002.csv
+ create mode 100644 .Rproj.user/shared/notebooks/D9013EFF-Game Log Scraping/1/s/csetup_chunk/000002.csv
+ create mode 100644 .Rproj.user/shared/notebooks/patch-chunk-names
+ create mode 100644 .Rproj.user/shared/notebooks/paths
+ create mode 100644 Data/schedule.csv
+ create mode 100644 Markdown/Game Log Cleaning.Rmd
+ create mode 100644 Markdown/Game Log Scraping.Rmd
+ create mode 100644 Markdown/Individual Top 20 2017-18 PPG Trends.Rmd
+ create mode 100644 Markdown/NBA Team Win Percentage All Time.Rmd
+ create mode 100644 NBA Trends.Rproj
+]0;~/Dropbox/01 - Personal Projects/NBA TrendsRyans-MacBook-Pro:NBA Trends ryanharrington$ git  remote add origin https://github.com/rharrington3 1/n[KNBA.git
+]0;~/Dropbox/01 - Personal Projects/NBA TrendsRyans-MacBook-Pro:NBA Trends ryanharrington$ git  push -u origin master
+fatal: cannot run rpostback-askpass: No such file or directory
+Username for 'https://github.com': rharrington31
+fatal: cannot run rpostback-askpass: No such file or directory
+Password for 'https://rharrington31@github.com': 
+]0;~/Dropbox/01 - Personal Projects/NBA TrendsRyans-MacBook-Pro:NBA Trends ryanharrington$ git init
+Reinitialized existing Git repository in /Users/ryanharrington/Dropbox/01 - Personal Projects/NBA Trends/.git/
+]0;~/Dropbox/01 - Personal Projects/NBA TrendsRyans-MacBook-Pro:NBA Trends ryanharrington$ git add .
