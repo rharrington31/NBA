@@ -310,11 +310,39 @@ schedule_transform_final %>%
                                   size = 10),
         axis.text = element_text(face = "italic",
                                  size = 8)) +
-labs(title = 'Game Number: {frame_time}',
-     x = "Current Win Number",
-     y = "Final Win Number",
-     caption = "@rharrington31") +
-transition_time(Game_Number) +
-ease_aes('linear')
+  labs(title = 'Game Number: {frame_time}',
+       x = "Current Win Number",
+       y = "Final Win Number",
+       caption = "@rharrington31") +
+  transition_time(Game_Number) +
+  ease_aes('linear')
 
 ```
+
+```{r}
+
+schedule_transform_final %>%
+  filter(Game_Number == 30) %>%
+  group_by(Win_Number, Win_Number_Final) %>%
+  summarise(Count = n()) %>%
+  ggplot(aes(x = Win_Number_Final,
+             y = Count)) +
+  geom_bar(stat = "identity",
+           fill = "#e83536") +
+  theme_minimal() +
+  theme(text = element_text(family = "Roboto"),
+        axis.title = element_text(face = "bold",
+                                  size = 10),
+        axis.text = element_text(face = "italic",
+                                 size = 8),
+        plot.caption = element_text(face = "bold",
+                                    size = 8)) +
+  labs(title = 'Teams that have won {frame_time} through game 30 have gone on to win __ games',
+       x = "Wins at Game 82",
+       y = "Number of Teams",
+       caption = "@rharrington31") +
+  transition_time(Win_Number) +
+  ease_aes('linear')
+
+```
+
