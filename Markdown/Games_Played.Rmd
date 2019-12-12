@@ -1,0 +1,335 @@
+---
+title: "All Time Games Scraping"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+if(!require("pacman")) install.packages("pacman")
+if(!require("ggtext")) devtools::install_github("clauswilke/ggtext")
+
+pacman::p_load(
+   here
+  ,tidyverse
+  ,rvest
+  ,glue
+  ,ggrepel
+)
+```
+
+```{r}
+get_players <- function(offset = seq(0, 4400, 100),
+                        ...) {
+  
+  games <- NULL
+  
+  for (offset_value in offset) {
+    path <-
+      paste0(
+        "https://www.basketball-reference.com/play-index/psl_finder.cgi"
+        ,"?request=",          "1"
+        ,"&match=",            "combined"
+        ,"&type=",             "totals"
+        ,"&per_minute_base=",  "36"
+        ,"&per_poss_base=",    "100"
+        ,"&season_start=",     "1"
+        ,"&season_end=",       "-1"
+        ,"&lg_id=",            "NBA"
+        ,"&age_min=",          "0"
+        ,"&age_max=",          "99"
+        ,"&is_playoffs=",      "N"
+        ,"&height_min=",       "0"
+        ,"&height_max=",       "99"
+        ,"&birth_country_is=", "Y"
+        ,"&as_comp=gt&as_val=","0"
+        ,"&pos_is_g=",         "Y"
+        ,"&pos_is_gf=",        "Y"
+        ,"&pos_is_f=",         "Y"
+        ,"&pos_is_fg=",        "Y"
+        ,"&pos_is_fc=",        "Y"
+        ,"&pos_is_c=",         "Y"
+        ,"&pos_is_cf=",        "Y"
+        ,"&c1stat=",           "g"
+        ,"&c1comp=",           "gt"
+        ,"&order_by=",         "g"
+        ,"&offset=",           offset_value
+      )
+    
+    webpage <- read_html(path)
+    
+    games_temp <- 
+      webpage %>% 
+      html_node("#stats") %>% 
+      html_table() %>% 
+      as.data.frame()
+    
+    colnames(games_temp) <- games_temp[1,]
+    
+    games_temp <-
+      games_temp %>% 
+      filter(Rk != "Rk")
+    
+    games <- rbind(games, games_temp)
+    
+  }  
+  
+  return(games)
+  
+}
+```
+
+```{r}
+players <- read_csv(here::here("Data", "player_games.csv"))
+# players <- get_players()
+# 
+# write_csv(players, here::here("Data", "player_games.csv"))
+```
+
+```{r}
+density_values <- density(as.numeric(players$G))
+
+density_values_complete <-
+  cbind(x = density_values$x, y = density_values$y) %>% 
+  as.data.frame() %>% 
+  mutate(x_round = round(x)) %>% 
+  complete(x_round = seq(min(x_round), max(x_round), by = 1)) %>% 
+  fill(x:y, .direction = "down")
+```
+
+```{r}
+players_selected <- 
+  players %>% 
+  select(Rk, Player, From, To, G, GS, MP) %>% 
+  mutate_at(vars(-Player), as.integer) %>% 
+  left_join(density_values_complete, by = c("G" = "x_round")) %>% 
+  mutate(Percent = Rk / n())
+```
+
+```{r}
+players_selected %>% 
+  ggplot(aes(x = G)) +
+  geom_hline(yintercept = 0, 
+               size = 1, 
+               color = "black") +
+  stat_density(aes(y = (..density..) * 461000),
+               geom = "area",
+               alpha = 0.6,
+               fill = "red") +
+  geom_histogram(binwidth = 52.37, 
+                 boundary = 0,
+                 alpha = 0.5) +
+  scale_x_continuous(labels = scales::comma) +
+  scale_y_continuous(labels = scales::comma) +
+    theme_minimal() +
+    theme(text         = element_text(family = "Roboto"),
+          plot.title   = element_text(face = "bold"),
+          axis.text    = element_text(face = "italic"),
+          axis.title   = element_text(face = "bold"),
+          plot.caption = element_text(face = "italic",
+                                      size = 8)) +
+    labs(x       = "Career Games Played",
+         y       = "Number of Players",
+         title   = "Density Plot Compared to Histogram", 
+         caption = paste0("Built by /u/rharrington31\n",
+                          "Data sourced from basketball-reference.com"))
+
+ggsave(here::here("Visualizations", "games_played_density_histogram_overlayed.png"),
+       width = 8, height = 4.5, dpi = 300)
+```
+
+```{r}
+get_percent_row <- function(percent, offset = 0, ...) {
+  number_of_games <-
+    players_selected[floor(nrow(players_selected) * percent), "G"] %>% 
+    unlist() %>% 
+    unname()
+  
+  players <- 
+    players_selected %>%
+    filter(between(G, number_of_games - offset, number_of_games + offset)) %>%
+    arrange(desc(To))
+  
+  return(list(number_of_games = number_of_games, 
+              players = players))
+}
+
+percent_001 <- get_percent_row(0.00125)
+percent_01  <- get_percent_row(0.01)
+percent_10  <- get_percent_row(0.10)
+percent_50  <- get_percent_row(0.50, offset = 1)
+```
+
+
+```{r}
+# vline_alpha  <- 0.5
+# xaxis_title  <- "Games Played"
+# yaxis_title  <- ""
+# caption_text <- paste0("Built by /u/rharrington31\n",
+#                        "Data sourced from basketball-reference.com")
+# nudge_dist   <- 75
+```
+
+```{r}
+create_label <- function(player_object, 
+                         percent_round_n = 1,
+                         round_n = 2,
+                         ...) {
+  
+  Player_Name     <- player_object$players$Player[1]
+  number_of_games <- player_object$players$G[1]
+  percent_more    <- scales::percent(player_object$players$Percent[1],
+                                     percent_round_n)
+  percent_less    <- scales::percent(1 - player_object$players$Percent[1],
+                                     percent_round_n)
+  times_more      <- round(1500 / player_object$players$G[1], round_n)
+  players_less    <- scales::comma(nrow(players_selected) - player_object$players$Rk[1])
+  players_more    <- scales::comma(player_object$players$Rk[1] - 1)
+  
+  if (player_object$players$Player[1] != "Vince Carter") {
+    label <-
+      paste0(Player_Name, " has played ", number_of_games," games.\n",
+             players_more, " players have played more games than him.\n",
+             players_less, " players have played less.\n",
+             "Vince Carter has played ~", times_more, " times more games.")
+  } else {
+    
+    label <-
+      paste0("Here is ", Player_Name, ". He's now played 1500 games.\n",
+             players_more, " players have played more games than him.\n",
+             players_less, " players have played less.")
+    
+  }
+  
+  return(label)
+  
+}
+```
+
+```{r}
+create_graph <- function(player_object,
+                         vline_alpha = 0.5,
+                         nudge_dist = 0,
+                         nudge_dist_change = 0,
+                         hjust = 0,
+                         curvature = 0.1,
+                         mult_y_nudge = 1,
+                         mult_yend_nudge = 1,
+                         xaxis_title = "Career Games Played",
+                         yaxis_title = "",
+                         caption_text = paste0("Built by /u/rharrington31\n",
+                                               "Data sourced from basketball-reference.com"),
+                         percent_n = 1,
+                         ...) {
+  
+  Player_Name     <- player_object$players$Player[1]
+  Player_Rank     <- player_object$players$Rk[1]
+  number_of_games <- player_object$number_of_games
+  density_value   <- player_object$players$y[1]
+  player_label    <- create_label(player_object, 
+                                  percent_round_n = percent_n)
+  percent_more    <- scales::percent(player_object$players$Percent[1],
+                                     accuracy = percent_n)
+  percent_less    <- scales::percent(1 - player_object$players$Percent[1],
+                                     accuracy = percent_n)
+  plot_title      <- paste(Player_Name, "has played more games than", 
+                           percent_less, "of NBA players")
+  
+  players_selected %>%
+    ggplot(aes(x = G)) +
+    geom_density(fill = "red",
+                 alpha = 0.6,
+                 color = NA) +
+    geom_hline(yintercept = 0,
+               size = 1,
+               color = "black") +
+    geom_vline(aes(xintercept = number_of_games),
+               alpha = vline_alpha,
+               size = 0.5) +
+    geom_text(aes(x     = number_of_games,
+                  y     = density_value * mult_y_nudge,
+                  label = player_label),
+              hjust    = hjust,
+              nudge_x  = nudge_dist + nudge_dist_change,
+              color    = "black",
+              size     = 3.5,
+              fontface = "italic",
+              family   = "Roboto") +
+    geom_curve(aes(x = number_of_games + nudge_dist + nudge_dist_change,
+                   y = density_value * mult_y_nudge,
+                   xend = number_of_games + nudge_dist_change,
+                   yend = density_value * mult_yend_nudge),
+               color = "black",
+               alpha = 0.6,
+               size  = 0.5,
+               curvature = curvature,
+               arrow = arrow(length = unit(0.01, "npc"),
+                             type = "closed"),
+               inherit.aes = FALSE) +
+    scale_x_continuous(labels = scales::comma) +
+    theme_minimal() +
+    theme(text         = element_text(family = "Roboto"),
+          plot.title   = element_text(face = "bold"),
+          axis.title.y = element_blank(),
+          axis.text.y  = element_blank(),
+          axis.text.x  = element_text(face = "italic"),
+          axis.title.x = element_text(face = "bold"),
+          plot.caption = element_text(face = "italic",
+                                      size = 8)) +
+    labs(x       = xaxis_title,
+         y       = yaxis_title,
+         title   = plot_title,
+         caption = caption_text)
+  
+}
+```
+
+```{r}
+create_graph(player_object = percent_50,
+             nudge_dist = 75,
+             nudge_dist_change = 10)
+
+ggsave(here::here("Visualizations", "games_played_50_percent.png"),
+       dpi = 300, width = 8, height = 4.5)
+```
+
+```{r}
+create_graph(percent_10,
+             nudge_dist = 75,
+             nudge_dist_change = 10,
+             mult_y_nudge = 2,
+             mult_yend_nudge = 1.05)
+
+ggsave(here::here("Visualizations", "games_played_10_percent.png"),
+       dpi = 300, width = 8, height = 4.5)
+```
+
+```{r}
+create_graph(percent_01,
+             hjust = 1,
+             nudge_dist = -75,
+             nudge_dist_change = -10,
+             mult_y_nudge = 20,
+             mult_yend_nudge = 1.05,
+             curvature = -0.1)
+
+ggsave(here::here("Visualizations", "games_played_01_percent.png"),
+       dpi = 300, width = 8, height = 4.5)
+```
+
+```{r}
+create_graph(percent_001,
+             hjust = 1,
+             nudge_dist = -75,
+             nudge_dist_change = -10,
+             mult_y_nudge = 75,
+             mult_yend_nudge = 2,
+             curvature = -0.1,
+             percent_n = 0.1)
+
+ggsave(here::here("Visualizations", "games_played_001_percent.png"),
+       dpi = 300, width = 8, height = 4.5)
+```
+
