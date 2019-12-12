@@ -1,4 +1,0 @@
-"0","(game_correlation <-"
-"0","  schedule_transform_final %>%"
-"0","  group_by(Game_Number) %>%"
-"0","  summarise(Correlation = cor(Win_Percent_Game, Win_Percent_Final)))"

@@ -1,4 +1,0 @@
-"0","win_percent_by_team_season <-"
-"0","  schedule_transform %>%"
-"0","  filter(Game_Number == max(Game_Number)) %>%"
-"0","  select(Season, Team, ""Win_Percent_Final"" = Win_Percent_Game, ""Win_Number_Final"" = Win_Number)"
