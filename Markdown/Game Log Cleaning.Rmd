@@ -321,14 +321,32 @@ schedule_transform_final %>%
 
 ```{r}
 
-schedule_transform_final %>%
-  filter(Game_Number == 30) %>%
+max_games <- 30
+
+Win_Number = seq(from = 1, to = max_games, by = 1)
+Win_Number_Final = seq(from = 1, to = 82, by = 1)
+
+win_grid <-
+  expand.grid(Win_Number = Win_Number,
+              Win_Number_Final = Win_Number_Final)
+
+schedule_aggregate_win_number_and_final <-
+  schedule_transform_final %>%
+  filter(Game_Number == max_games) %>%
   group_by(Win_Number, Win_Number_Final) %>%
-  summarise(Count = n()) %>%
+  summarise(Count = n()) 
+  
+win_grid <-
+  win_grid %>%
+  left_join(schedule_aggregate_win_number_and_final) %>%
+  mutate(Count = replace_na(Count,0))
+
+win_grid %>%
   ggplot(aes(x = Win_Number_Final,
              y = Count)) +
   geom_bar(stat = "identity",
-           fill = "#e83536") +
+           fill = "#e83536",
+           width = 1.0) +
   theme_minimal() +
   theme(text = element_text(family = "Roboto"),
         axis.title = element_text(face = "bold",
@@ -337,12 +355,14 @@ schedule_transform_final %>%
                                  size = 8),
         plot.caption = element_text(face = "bold",
                                     size = 8)) +
-  labs(title = 'Teams that have won {frame_time} through game 30 have gone on to win __ games',
+  labs(title = paste("Teams that have won {closest_state} games through game",max_games,"have gone on to win __ games"),
        x = "Wins at Game 82",
        y = "Number of Teams",
        caption = "@rharrington31") +
-  transition_time(Win_Number) +
-  ease_aes('linear')
+  transition_states(Win_Number,
+                    transition_length = 5,
+                    state_length = 5) +
+  ease_aes('cubic-in-out')
 
 ```
 
