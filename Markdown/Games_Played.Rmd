@@ -138,6 +138,35 @@ ggsave(here::here("Visualizations", "games_played_density_histogram_overlayed.pn
 ```
 
 ```{r}
+players_selected %>% 
+  ggplot(aes(x = G)) +
+  geom_hline(yintercept = 0, 
+               size = 1, 
+               color = "black") +
+  geom_density(alpha = 0.6,
+               fill = "red",
+               color = NA) +
+  scale_x_continuous(labels = scales::comma) +
+  scale_y_continuous(labels = scales::percent) +
+    theme_minimal() +
+    theme(text         = element_text(family = "Roboto"),
+          plot.title   = element_text(face = "bold"),
+          axis.text    = element_text(face = "italic"),
+          axis.title   = element_text(face = "bold"),
+          plot.caption = element_text(face = "italic",
+                                      size = 8)) +
+    labs(x       = "Career Games Played",
+         y       = "Likelihood of Playing in ___ Games",
+         title   = "Density Plot Compared to Histogram", 
+         caption = paste0("Built by /u/rharrington31\n",
+                          "Data sourced from basketball-reference.com"))
+
+ggsave(here::here("Visualizations", "games_played_density_labeled.png"),
+       width = 8, height = 4.5, dpi = 300)
+```
+
+
+```{r}
 get_percent_row <- function(percent, offset = 0, ...) {
   number_of_games <-
     players_selected[floor(nrow(players_selected) * percent), "G"] %>% 
