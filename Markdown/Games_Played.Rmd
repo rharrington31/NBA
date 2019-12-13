@@ -156,8 +156,8 @@ players_selected %>%
           plot.caption = element_text(face = "italic",
                                       size = 8)) +
     labs(x       = "Career Games Played",
-         y       = "Likelihood of Playing in ___ Games",
-         title   = "Density Plot Compared to Histogram", 
+         y       = "",
+         title   = "Likelihood of Playing in ___ Games", 
          caption = paste0("Built by /u/rharrington31\n",
                           "Data sourced from basketball-reference.com"))
 
