@@ -9,14 +9,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 if(!require("pacman")) install.packages("pacman")
-if(!require("ggtext")) devtools::install_github("clauswilke/ggtext")
 
 pacman::p_load(
    here
   ,tidyverse
   ,rvest
-  ,glue
-  ,ggrepel
 )
 ```
 
