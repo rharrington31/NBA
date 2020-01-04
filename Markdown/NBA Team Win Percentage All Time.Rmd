@@ -22,14 +22,14 @@ Necessary libraries are loaded in
 
 ```{r libraries, message = FALSE, warning = FALSE, error = FALSE}
 
-# install.packages("tidyverse")
-library(tidyverse)
-# install.packages("rvest")
-library(rvest)
-# install.packages("readr")
-library(readr)
-# install.packages("plotly")
-library(plotly)
+if (! require("pacman")) install.packages("pacman")
+
+pacman::p_load(
+  tidyverse
+  ,rvest
+  ,readr
+  ,plotly
+  )
 
 ```
 
