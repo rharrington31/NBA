@@ -201,9 +201,7 @@ get_team_games <- function(teams_df = as.data.frame()) {
 
 ```{r}
 team_games <-
-  get_team_games(teams_df = teams %>% 
-                   filter(Team %in% c("ATL", "BOS"),
-                          Year == 2020))
+  get_team_games(teams_df = teams)
 ```
 
 
