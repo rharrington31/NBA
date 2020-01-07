@@ -61,6 +61,52 @@ team_abbreviation_list <-
 
 ```
 
+```{r}
+get_league_teams <- function(years) {
+  
+  urls <- NULL
+  
+  for (year in years) {
+    
+    league_url <- paste0("https://www.basketball-reference.com/leagues/NBA_", year, ".html")
+    
+    webpage_check <- try(
+      league_webpage <- read_html(league_url)
+    )
+    
+    urls_temp <- 
+      league_webpage %>% 
+      html_nodes("table a") %>% 
+      html_attrs() %>% 
+      as.list() %>% 
+      unlist() %>% 
+      unname() %>% 
+      unique()
+    
+    urls[[length(urls) + 1]] <- urls_temp
+    
+  }  
+  
+  urls <-
+    urls %>% 
+    unlist()
+  
+  return(urls)
+  
+}
+```
+
+```{r}
+team_urls <- get_league_teams(years = 1950:2020)
+```
+
+```{r}
+teams <- 
+  data.frame(Team_URL = team_urls) %>% 
+  mutate(Team = str_extract(Team_URL, "[A-Z]+"),
+         Year = str_extract(Team_URL, "[0-9]+")) %>% 
+  select(Team, Year, Team_URL)
+```
 
 
 ### Get Team Games
