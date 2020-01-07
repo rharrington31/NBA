@@ -46,7 +46,8 @@ team_webpage <- read_html(team_urls)
 
 ```{r}
 
-team_webpage %>%
+teams <- 
+  team_webpage %>%
   html_nodes("#teams_active") %>%
   html_table() %>%
   as.data.frame()
@@ -75,7 +76,9 @@ team_year <- read_html(team_year_url)
 
 ```{r}
 
-get_team_games <- function(team_abbreviation_list = as.list(), years = as.list(),... ){
+get_team_games <- function(team_abbreviation_list = as.list(), 
+                           years = as.list(),
+                           ... ){
   
   team_year_games <- NULL
   
@@ -84,53 +87,71 @@ get_team_games <- function(team_abbreviation_list = as.list(), years = as.list()
     for(j in 1:length(years)) {
       
       # Build URL
-      team_year_url <- paste0("https://www.basketball-reference.com/teams/",team_abbreviation_list[i],"/",years[j]"_games.html")
+      team_year_url <- paste0("https://www.basketball-reference.com/teams/",
+                              team_abbreviation_list[i],"/", years[j], "_games.html")
       
       # Extract HTML from URL
-      team_year <- read_html(team_year_url)
+      webpage_check <- try(
+        team_year <- read_html(team_year_url)
+      )
       
       # Extract Table from URL
-      team_year_games_temp <- 
-        team_year %>%
-        html_nodes("#games") %>%
-        html_table() %>%
-        as.data.frame() %>%
-        filter(G != "G") %>%
-        select("G" = G, "Date" = Date, "StartTime" = Start..ET., "Home" = Var.6, "Opponent" = Opponent, "Win" = Var.8,"TeamScore" = Tm, "OppScore" = Opp, "TotalWins" = W, "TotalLosses" = L, "Streak" = Streak) %>%
-        mutate(Date = str_replace(Date,"^[A-Za-z]{3}, ",""),
-               Date = as.Date(Date, format = "%b %d, %Y"),
-               StartTime = str_replace(StartTime,"p",""),
-               StartTime = paste0(as.numeric(str_extract(StartTime,"^[0-9]{1,2}"))+12,str_extract(StartTime,":[0-9]{2}")),
-               Date = as.POSIXct(paste(Date,StartTime)),
-               Home = as.factor(if_else(Home != "@", 1, 0)),
-               Win = as.factor(if_else(Win == "W", 1, 0)),
-               TeamScore = as.numeric(TeamScore),
-               OppScore = as.numeric(OppScore),
-               TotalWins = as.numeric(TotalWins),
-               TotalLosses = as.numeric(TotalLosses),
-               WinPercent = TotalWins/(TotalWins + TotalLosses),
-               Team = team_abbreviation_list[i]
-               Season = years[j]) %>%
-        select(-StartTime)
-      
-      # Create a data frame
-      assign(paste0("game_log.",team_abbreviation_list[i],years[j])
-      
-      # Join the temp table to the real table
-      game_log_table <- rbind(game_log_table, game_log_table_temp)
-      # print(game_log_table)
-      
-      # Sleep for a bit
-      sleep_time <- runif(1) + 5
-      Sys.sleep(time = sleep_time)
+      if (class(webpage_check)[1] != "try-error") {
+        team_year_games_temp <- 
+          team_year %>%
+          html_nodes("#games") %>%
+          html_table() %>%
+          as.data.frame() %>%
+          filter(G != "G") %>%
+          select("G" = G, "Date" = Date, "StartTime" = Start..ET., 
+                 "Home" = Var.6, "Opponent" = Opponent, 
+                 "Win" = Var.8,"TeamScore" = Tm, "OppScore" = Opp, 
+                 "TotalWins" = W, "TotalLosses" = L, "Streak" = Streak) %>%
+          mutate(Date = str_remove(Date, "^[A-Za-z]{3}, "),
+                 Date = as.Date(Date, format = "%b %d, %Y"),
+                 StartTime = str_replace(StartTime,"p",""),
+                 StartTime = paste0(as.numeric(str_extract(StartTime, "^[0-9]{1,2}")) + 12,
+                                    str_extract(StartTime,":[0-9]{2}")),
+                 Date = as.POSIXct(paste(Date, StartTime)),
+                 Home = as.factor(if_else(Home != "@", 1, 0)),
+                 Win = as.factor(if_else(Win == "W", 1, 0)),
+                 TeamScore = as.numeric(TeamScore),
+                 OppScore = as.numeric(OppScore),
+                 TotalWins = as.numeric(TotalWins),
+                 TotalLosses = as.numeric(TotalLosses),
+                 WinPercent = TotalWins / (TotalWins + TotalLosses),
+                 Team = team_abbreviation_list[i],
+                 Season = years[j]) %>%
+          select(-StartTime)
+        
+        # Create a data frame
+        # assign(paste0("game_log.", team_abbreviation_list[i], years[j]))
+        
+        # Join the temp table to the real table
+        team_year_games <- rbind(team_year_games, team_year_games_temp)
+        # print(game_log_table)
+        
+        # Sleep for a bit
+        # sleep_time <- runif(1) + 5
+        # Sys.sleep(time = sleep_time)
+      }      
       
     }
     
   }
-
+  
+  return(team_year_games)
   
 }
+
 ```
+
+```{r}
+team_games <-
+  get_team_games(team_abbreviation_list = team_abbreviation_list,
+                 years = c(2018))
+```
+
 
 ### Get Player 2017-18 Game Logs
 
@@ -155,8 +176,6 @@ for(i in 1:length(game_log)) {
     game_log_table <- as.data.frame(game_log[i])
   }
 }
-
-
 
 
 ```
@@ -241,7 +260,16 @@ for (i in 1:ncol(game_log_table_clean)) {
 
 game_log_table_clean <- 
   game_log_table_clean %>%
-  rename("Rank" = Rk, "Game" = G, "Date" = Date, "Age" = Age, "Team" = Tm, "Home" = Var.6, "Opp" = Opp, "Margin" = Var.8, "Started" = GS, "Minutes" = MP, "FG" = FG, "FGA" = FGA, "FGpercent" = FG., "X3P" = X3P, "X3PA" = X3PA, "X3Ppercent" = X3P., "FT" = FT, "FTA" = FTA, "FTpercent" = FT., "ORB" = ORB, "DRB" = DRB, "TRB" = TRB, "AST" = AST, "STL" = STL, "BLK" = BLK, "TOV" = TOV, "PF" = PF, "PTS" = PTS, "GmSc" = GmSc, "PlusMinus" = X..., "Player" = Player) %>%
+  rename("Rank" = Rk, "Game" = G, "Date" = Date, "Age" = Age, 
+         "Team" = Tm, "Home" = Var.6, "Opp" = Opp, 
+         "Margin" = Var.8, "Started" = GS, "Minutes" = MP, 
+         "FG" = FG, "FGA" = FGA, "FGpercent" = FG., 
+         "X3P" = X3P, "X3PA" = X3PA, "X3Ppercent" = X3P., 
+         "FT" = FT, "FTA" = FTA, "FTpercent" = FT., 
+         "ORB" = ORB, "DRB" = DRB, "TRB" = TRB, "AST" = AST, 
+         "STL" = STL, "BLK" = BLK, "TOV" = TOV, 
+         "PF" = PF, "PTS" = PTS, "GmSc" = GmSc, 
+         "PlusMinus" = X..., "Player" = Player) %>%
   select(-Rank, Player, Game:PlusMinus) 
 
 game_log_table_clean <-
