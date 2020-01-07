@@ -122,50 +122,65 @@ get_team_games <- function(teams_df = as.data.frame()) {
     
     # Extract Table from URL
     if (class(webpage_check)[1] != "try-error") {
-      team_year_games_temp <- 
-        team_year %>%
-        html_nodes("#games") %>%
-        html_table() %>%
-        as.data.frame() %>%
-        filter(G != "G") %>%
-        select("G" = G, "Date" = Date, "StartTime" = Start..ET., 
-               "Home" = Var.6, "Opponent" = Opponent, 
-               "Win" = Var.8,"TeamScore" = Tm, "OppScore" = Opp, 
-               "TotalWins" = W, "TotalLosses" = L, "Streak" = Streak) %>%
-        mutate(Date = str_remove(Date, "^[A-Za-z]{3}, "),
-               Date = as.Date(Date, format = "%b %d, %Y"),
-               StartTime = str_replace(StartTime,"p",""),
-               StartTime = paste0(as.numeric(str_extract(StartTime, "^[0-9]{1,2}")) + 12,
-                                  str_extract(StartTime,":[0-9]{2}")),
-               Date = as.POSIXct(paste(Date, StartTime)),
-               Home = as.factor(if_else(Home != "@", 1, 0)),
-               Win = as.factor(if_else(Win == "W", 1, 0)),
-               TeamScore = as.numeric(TeamScore),
-               OppScore = as.numeric(OppScore),
-               TotalWins = as.numeric(TotalWins),
-               TotalLosses = as.numeric(TotalLosses),
-               WinPercent = TotalWins / (TotalWins + TotalLosses),
-               Team = team,
-               Season = year) %>%
-        select(-StartTime, Team, Season, everything())
       
-      # Create a data frame
-      # assign(paste0("game_log.", team_abbreviation_list[i], years[j]))
+      games_table_check <- try(
+        team_year_games_temp <- 
+          team_year %>%
+          html_nodes("#games") %>%
+          html_table() %>%
+          as.data.frame()
+      )
       
-      # Join the temp table to the real table
-      team_year_games <- rbind(team_year_games, team_year_games_temp)
-      # print(game_log_table)
-      
-      elapsed_time <- difftime(Sys.time(), start_time,
-                               units = "mins")
-      
-      message(cat(paste0(year, " | ", team, "\n",
-                        i, " of ", total_teams, " teams \n",
-                        "Elapsed: ", round(elapsed_time, 3), " minutes \n")))
-      
-      # Sleep for a bit
-      sleep_time <- runif(1) + 2
-      Sys.sleep(time = sleep_time)
+      # Manipulate extracted table
+      if (class(games_table_check)[1] != "try-error") {
+        
+        manipulation_check <- try(
+          team_year_games_temp <- 
+            team_year_games_temp %>%
+            filter(G != "G") %>%
+            select("G" = G, "Date" = Date, "StartTime" = Start..ET., 
+                   "Home" = Var.6, "Opponent" = Opponent, 
+                   "Win" = Var.8,"TeamScore" = Tm, "OppScore" = Opp, 
+                   "TotalWins" = W, "TotalLosses" = L, "Streak" = Streak) %>%
+            mutate(Date = str_remove(Date, "^[A-Za-z]{3}, "),
+                   Date = as.Date(Date, format = "%b %d, %Y"),
+                   StartTime = str_replace(StartTime,"p",""),
+                   StartTime = paste0(as.numeric(str_extract(StartTime, "^[0-9]{1,2}")) + 12,
+                                      str_extract(StartTime,":[0-9]{2}")),
+                   Date = as.POSIXct(paste(Date, StartTime)),
+                   Home = as.factor(if_else(Home != "@", 1, 0)),
+                   Win = as.factor(if_else(Win == "W", 1, 0)),
+                   TeamScore = as.numeric(TeamScore),
+                   OppScore = as.numeric(OppScore),
+                   TotalWins = as.numeric(TotalWins),
+                   TotalLosses = as.numeric(TotalLosses),
+                   WinPercent = TotalWins / (TotalWins + TotalLosses),
+                   Team = team,
+                   Season = year) %>%
+            select(-StartTime, Team, Season, everything())
+        )        
+        
+        if (class(manipulation_check)[1] != "try-error") {
+          # Create a data frame
+          # assign(paste0("game_log.", team_abbreviation_list[i], years[j]))
+          
+          # Join the temp table to the real table
+          team_year_games <- rbind(team_year_games, team_year_games_temp)
+          # print(game_log_table)
+          
+          elapsed_time <- difftime(Sys.time(), start_time,
+                                   units = "mins")
+          
+          message(cat(paste0(year, " | ", team, "\n",
+                             i, " of ", total_teams, " teams \n",
+                             "Elapsed: ", round(elapsed_time, 3), " minutes \n")))
+          
+          # Sleep for a bit
+          sleep_time <- runif(1) + 2
+          Sys.sleep(time = sleep_time)
+          
+        }        
+      }      
       
     }      
     
@@ -177,7 +192,7 @@ get_team_games <- function(teams_df = as.data.frame()) {
 
 ```
 
-# Analysis
+# Get Data
 
 ```{r}
 team_urls <- get_league_teams(years = 1950:2020)
@@ -196,4 +211,7 @@ team_games <-
   get_team_games(teams_df = teams)
 ```
 
+```{r}
+write_csv(team_games, here::here("Data", "team_games_1950_2020.csv"))
+```
 
