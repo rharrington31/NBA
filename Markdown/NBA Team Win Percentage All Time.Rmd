@@ -125,8 +125,10 @@ team_year <- read_html(team_year_url)
 get_team_games <- function(teams_df = as.data.frame()) {
   
   team_year_games <- NULL
+  total_teams     <- nrow(teams_df)
+  start_time      <- Sys.time()
   
-  for(i in 1:nrow(teams_df)) {
+  for(i in 1:total_teams) {
     
     team <- teams_df$Team[i]
     year <- teams_df$Year[i]
@@ -176,9 +178,17 @@ get_team_games <- function(teams_df = as.data.frame()) {
       team_year_games <- rbind(team_year_games, team_year_games_temp)
       # print(game_log_table)
       
+      elapsed_time <- difftime(Sys.time(), start_time,
+                               units = "mins")
+      
+      message(cat(paste0(year, " | ", team, "\n",
+                        i, " of ", total_teams, " teams \n",
+                        "Elapsed: ", round(elapsed_time, 3), " minutes \n")))
+      
       # Sleep for a bit
-      sleep_time <- runif(1) + 5
+      sleep_time <- runif(1) + 2
       Sys.sleep(time = sleep_time)
+      
     }      
     
   }
@@ -191,7 +201,9 @@ get_team_games <- function(teams_df = as.data.frame()) {
 
 ```{r}
 team_games <-
-  get_team_games(teams_df = teams)
+  get_team_games(teams_df = teams %>% 
+                   filter(Team %in% c("ATL", "BOS"),
+                          Year == 2020))
 ```
 
 
