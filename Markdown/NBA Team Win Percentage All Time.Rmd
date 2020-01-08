@@ -24,12 +24,19 @@ Necessary libraries are loaded in
 
 if (! require("pacman")) install.packages("pacman")
 
+if (! require("gganimate")) devtools::install_github('thomasp85/gganimate')
+
 pacman::p_load(
   tidyverse
   ,rvest
   ,readr
   ,plotly
+  ,gganimate
+  ,gifski
+  ,glue
   )
+
+theme_set(theme_minimal())
 
 ```
 
@@ -213,5 +220,77 @@ team_games <-
 
 ```{r}
 write_csv(team_games, here::here("Data", "team_games_1950_2020.csv"))
+team_games <- read_csv(here::here("Data", "team_games_1950_2020.csv"))
+```
+
+```{r}
+wins_comparison <- 
+  team_games %>% 
+  add_count(Team, Season, name = "TotalGames") %>% 
+  filter(TotalGames == 82) %>% 
+  group_by(Team, Season) %>% 
+  mutate(FinalWins = max(TotalWins)) %>% 
+  ungroup() %>% 
+  mutate(WinPercentFinal = FinalWins / TotalGames,
+         G = as.numeric(G)) %>% 
+  select(G, Team, Season, WinPercent, WinPercentFinal)
+```
+
+```{r}
+# anim <- 
+  wins_comparison %>% 
+  filter(! is.na(WinPercentFinal)) %>% 
+  ggplot(aes(x = WinPercent,
+             y = WinPercentFinal)) +
+  geom_point(alpha = 0.75) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  # labs(title = "Game {G} of 82",
+  #      x     = "Win % after game {G}",
+  #      y     = "Win % after game 82") +
+  transition_time(G) +
+  enter_fade() + 
+  exit_shrink() +
+  ease_aes('sine-in-out')
+
+# anim_save(here::here("Visualizations", "current_vs_final_win_percent_by_game.gif"),
+#           anim)
+```
+
+```{r}
+wins_comparison %>% 
+  filter(! is.na(WinPercentFinal)) %>% 
+  mutate(WinPercentDiff = WinPercentFinal - WinPercent) %>% 
+  ggplot(aes(x = WinPercentDiff)) +
+  geom_histogram(binwidth = 0.1,
+                 center = 0) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::comma) +
+  # labs(title = "Game {G} of 82",
+  #      x     = "Win % after game {G}",
+  #      y     = "Win % after game 82") +
+  transition_time(G) +
+  enter_fade() + 
+  exit_shrink() +
+  ease_aes('sine-in-out')
+```
+
+```{r}
+wins_comparison %>% 
+  filter(! is.na(WinPercentFinal)) %>% 
+  mutate(WinPercentDiff = WinPercentFinal - WinPercent) %>% 
+  ggplot(aes(x = WinPercent,
+             y = WinPercentDiff,
+             color = WinPercentFinal)) +
+  geom_point(alpha = 0.75) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = glue("Game {G} of 82"),
+       x     = glue("Win % after game {G}"),
+       y     = glue("Win % after game 82")) +
+  transition_time(G) +
+  enter_fade() + 
+  exit_shrink() +
+  ease_aes('sine-in-out')
 ```
 
